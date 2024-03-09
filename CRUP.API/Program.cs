@@ -44,7 +44,8 @@ void ConfigureServices(WebApplicationBuilder builder)
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddDbContext<CRUPDataContext>(options =>
     {
-        options.UseSqlServer(connectionString, x => x.MigrationsAssembly("CRUP.Infra"));
+        //options.UseSqlServer(connectionString, x => x.MigrationsAssembly("CRUP.Infra"));
+        options.UseNpgsql(connectionString, x => x.MigrationsAssembly("CRUP.Infra"));
     });
 
     // Add services to the container.

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CRUP.Shared.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CRUP.Domain.Entities
 {
@@ -24,6 +25,7 @@ namespace CRUP.Domain.Entities
  
         }
 
+        [ExcludeFromCodeCoverage]
         protected Cliente() { }
 
         public string Cpf { get; private set; }

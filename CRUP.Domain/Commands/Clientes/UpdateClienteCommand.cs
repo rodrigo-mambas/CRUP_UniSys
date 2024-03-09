@@ -5,7 +5,7 @@ namespace CRUP.Domain.Commands.Clientes
 {
     public class UpdateClienteCommand : BaseCommand
     {
-        public Guid IdClienteExistente { get; private set; }
+        public Guid IdClienteExistente { get; set; }
 
         public string Cpf { get; set; }
         public string Nome { get; set; }

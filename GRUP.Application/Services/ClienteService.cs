@@ -21,22 +21,22 @@ namespace CRUP.Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        [ExcludeFromCodeCoverage]
+
         public async Task<CommandResult> GetAllClientes()
         {
-            var listaClientes = await _readRepository.FindAll().ToListAsync();
+            var listaClientes = _readRepository.FindAll();
 
-            if (listaClientes is null || listaClientes.Count == 0)
+            if (listaClientes is null || listaClientes.Count() == 0)
                 return new CommandResult(false, "Falha ao consultar clientes");
 
             return new CommandResult(true, "Clientes consultados com sucesso", listaClientes);
         }
-        [ExcludeFromCodeCoverage]
+
         public async Task<CommandResult> GetByIdCliente(Guid id)
         {
-            var cliente = await _readRepository.FindByCondition(x => x.Id == id).ToListAsync();
+            var cliente = _readRepository.FindByCondition(x => x.Id == id);
 
-            if (cliente is null || cliente.Count == 0)
+            if (cliente is null || cliente.Count() == 0)
                 return new CommandResult(false, "Falha ao consultar cliente");
 
             return new CommandResult(true, "Cliente consultado com sucesso", cliente);
@@ -58,7 +58,7 @@ namespace CRUP.Application.Services
 
             return new CommandResult(true, "Cliente registrado com sucesso", cliente);
         }
-        [ExcludeFromCodeCoverage]
+
         public async Task<CommandResult> UpdateCliente(UpdateClienteCommand command)
         {
             command.Validate();
@@ -66,7 +66,8 @@ namespace CRUP.Application.Services
             if (!command.IsValid )
                 return new CommandResult(false, "Falha ao alterar cliente", command.Notifications);
 
-            var cliente = await _readRepository.FindByCondition(x => x.Id == command.IdClienteExistente).FirstOrDefaultAsync();
+            //var cliente = _readRepository.FindByCondition(x => x.Id == id).FirstOrDefault();
+            var cliente = _readRepository.FindByCondition(x => x.Id == command.IdClienteExistente).FirstOrDefault();
             if (cliente is null)
                 return new CommandResult(false, "Falha ao recuperar cliente");
 
@@ -77,10 +78,10 @@ namespace CRUP.Application.Services
 
             return new CommandResult(true, "Cliente alterado com sucesso", cliente);
         }
-        [ExcludeFromCodeCoverage]
+
         public async Task<CommandResult> DeleteCliente(Guid id)
         {
-            var cliente = await _readRepository.FindByCondition(x => x.Id == id).FirstOrDefaultAsync();
+            var cliente =  _readRepository.FindByCondition(x => x.Id == id).FirstOrDefault();
             if (cliente is null)
                 return new CommandResult(false, "Falha ao recuperar cliente");
 
