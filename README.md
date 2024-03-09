@@ -19,5 +19,4 @@ Critérios de avaliação:
 
 
 ## Demonstração 
-
-![alt text](image.png)
+![image](https://github.com/rodrigo-mambas/CRUP_UniSys/assets/57135792/0c64892d-5140-4c4b-9c94-4bf04034c4a5)
