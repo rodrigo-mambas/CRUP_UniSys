@@ -15,6 +15,9 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using Xunit;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using CRUP.API.Controllers;
+using CRUP.Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CRUP.API.Test
 {
@@ -35,24 +38,46 @@ namespace CRUP.API.Test
         }
 
         [Fact]
-        public async Task GetAllClientes_DeveRetornarListaDeClientes()
+        public async Task CreateCliente_DeveCriarCliente()
         {
             // Arrange
+            var clienteCommand = new CreateClienteCommand();
+            clienteCommand.Nome = "1";
+            clienteCommand.DataDeNascimento = Convert.ToDateTime("30/01/2015");
+            clienteCommand.Cpf = "12345678909";
+            clienteCommand.DataExpedicao = Convert.ToDateTime("30/01/2015"); 
+            clienteCommand.EstadoCivil = "1";
+            clienteCommand.Rg = "1";
+            clienteCommand.Sexo = "1";
+            clienteCommand.OrgaoExpedicao = "1";
 
-            var ddd = new CommandResult();
-            ddd.Success = true;
-            ddd.Message = string.Empty;
-            ddd.Data = new List<Cliente>
-            {
-                new Cliente( "12345678909","asdfgh1","sdddd",Convert.ToDateTime("30/01/2015"),"asd","df",Convert.ToDateTime("30/01/2015"),"wer","sdf"),
-                new Cliente( "12345678909","asdfgh2","sdddd",Convert.ToDateTime("30/01/2015"),"asd","df",Convert.ToDateTime("30/01/2015"),"wer","sdf"),
-                new Cliente( "12345678909","asdfgh3","sdddd",Convert.ToDateTime("30/01/2015"),"asd","df",Convert.ToDateTime("30/01/2015"),"wer","sdf"),
-            };
-            
+            //act
+            var result = await _clienteService.CreateCliente(clienteCommand);
 
+            //assert
+            Assert.True(result.Success);
         }
 
+        [Fact]
+        public async Task GetAllClientes_DeveRetornarListaDeClientes1()
+        {
+            // Arrange
+            var clienteCommand = new CreateClienteCommand();
+            clienteCommand.Nome = "1";
+            clienteCommand.DataDeNascimento = Convert.ToDateTime("30/01/2015");
+            clienteCommand.Cpf = "1";
+            clienteCommand.DataExpedicao = Convert.ToDateTime("30/01/2015");
+            clienteCommand.EstadoCivil = "1";
+            clienteCommand.Rg = "1";
+            clienteCommand.Sexo = "1";
+            clienteCommand.OrgaoExpedicao = "1";
 
+            //act
+            var result = await _clienteService.CreateCliente(clienteCommand);
+
+            //assert
+            Assert.False(result.Success);
+        }
     }
 }
 

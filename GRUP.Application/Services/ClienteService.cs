@@ -44,9 +44,6 @@ namespace CRUP.Application.Services
         {
             command.Validate();
 
-
-            
-
             if (!command.IsValid )
                 return new CommandResult(false, "Falha ao registrar cliente", command.Notifications);
 
@@ -64,14 +61,12 @@ namespace CRUP.Application.Services
         {
             command.Validate();
 
-
             if (!command.IsValid )
                 return new CommandResult(false, "Falha ao alterar cliente", command.Notifications);
 
             var cliente = await _readRepository.FindByCondition(x => x.Id == command.IdClienteExistente).FirstOrDefaultAsync();
             if (cliente is null)
                 return new CommandResult(false, "Falha ao recuperar cliente");
-
 
             cliente.Alterar(command);
 

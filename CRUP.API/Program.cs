@@ -9,6 +9,7 @@ using CRUP.Application.Handlers;
 using CRUP.Domain.Commands.Clientes;
 using CRUP.Application.Services;
 using System.Diagnostics.CodeAnalysis;
+using CRUP.API.Configuration;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,7 +44,7 @@ void ConfigureServices(WebApplicationBuilder builder)
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     builder.Services.AddDbContext<CRUPDataContext>(options =>
     {
-        options.UseSqlServer(connectionString, x => x.MigrationsAssembly("GTI.Infra"));
+        options.UseSqlServer(connectionString, x => x.MigrationsAssembly("CRUP.Infra"));
     });
 
     // Add services to the container.
@@ -51,6 +52,8 @@ void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddControllers();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+
+    builder.Services.AddSwaggerConfiguration();
 
     builder.Services.AddCors(options =>
     {
@@ -85,3 +88,6 @@ IServiceCollection GetServiceCollection(WebApplicationBuilder builder)
 
     return services;
 }
+
+[ExcludeFromCodeCoverage]
+public partial class Program { }

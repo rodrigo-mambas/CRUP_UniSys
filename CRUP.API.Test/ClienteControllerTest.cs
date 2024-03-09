@@ -1,17 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CRUP.API;
-using CRUP.API.Controllers;
+﻿using CRUP.API.Controllers;
 using CRUP.Application.Interfaces;
 using CRUP.Domain.Commands;
 using CRUP.Domain.Commands.Clientes;
-using CRUP.Domain.Entities;
 using CRUP.Shared.Handlers;
 using Moq;
-using Xunit;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CRUP.API.Test
 {
@@ -31,26 +24,22 @@ namespace CRUP.API.Test
         public void GetAllAsync_Get_DeveRetornarOK()
         {
             // Arrange
-
-            var ddd = new CommandResult();
-            ddd.Success = true;
-            ddd.Message = string.Empty;
-            ddd.Data = string.Empty;
-            _clienteServiceMock.Setup(x => x.GetAllClientes()).ReturnsAsync(ddd);
-            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(ddd);
-            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(ddd);
+            var commandResult = new CommandResult();
+            commandResult.Success = true;
+            commandResult.Message = string.Empty;
+            commandResult.Data = string.Empty;
+            _clienteServiceMock.Setup(x => x.GetAllClientes()).ReturnsAsync(commandResult);
+            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
+            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
 
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
-
-
 
             // Act
             var result = controller.GetAllAsync();
 
-            // Assert
+            // Assert 
             Assert.NotNull(result);
-            
-            //Assert.Equal(200, result.Status.sta.StatusCode);
+            Assert.Equal(200, ((ObjectResult)result.Result).StatusCode);
         }
 
         [Fact]
@@ -58,58 +47,45 @@ namespace CRUP.API.Test
         {
             // Arrange
 
-            var ddd = new CommandResult();
-            ddd.Success = false;
-            ddd.Message = string.Empty;
-            ddd.Data = string.Empty;
-            _clienteServiceMock.Setup(x => x.GetAllClientes()).ReturnsAsync(ddd);
-            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(ddd);
-            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(ddd);
+            var commandResult = new CommandResult();
+            commandResult.Success = false;
+            commandResult.Message = string.Empty;
+            commandResult.Data = string.Empty;
+            _clienteServiceMock.Setup(x => x.GetAllClientes()).ReturnsAsync(commandResult);
+            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
+            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
 
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
-
-
 
             // Act
             var result = controller.GetAllAsync();
 
             // Assert
             Assert.NotNull(result);
-
-            //Assert.re
+            Assert.Equal(400, ((ObjectResult)result.Result).StatusCode);
         }
 
-
-
-
-
-
-
-        ///////
         [Fact]
         public void GetByIdAsync_Get_DeveRetornarOK()
         {
             // Arrange
             var id = new Guid();
-            var ddd = new CommandResult();
-            ddd.Success = true;
-            ddd.Message = string.Empty;
-            ddd.Data = string.Empty;
-            _clienteServiceMock.Setup(x => x.GetByIdCliente(id)).ReturnsAsync(ddd);
-            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(ddd);
-            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(ddd);
+            var commandResult = new CommandResult();
+            commandResult.Success = true;
+            commandResult.Message = string.Empty;
+            commandResult.Data = string.Empty;
+            _clienteServiceMock.Setup(x => x.GetByIdCliente(id)).ReturnsAsync(commandResult);
+            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
+            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
 
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
-
-
 
             // Act
             var result = controller.GetByIdAsync(id);
 
             // Assert
             Assert.NotNull(result);
-
-            //Assert.Equal(200, result.Status.sta.StatusCode);
+            Assert.Equal(200, ((ObjectResult)result.Result).StatusCode);
         }
 
         [Fact]
@@ -117,55 +93,46 @@ namespace CRUP.API.Test
         {
             // Arrange
             var id = new Guid();
-            var ddd = new CommandResult();
-            ddd.Success = false;
-            ddd.Message = string.Empty;
-            ddd.Data = string.Empty;
-            _clienteServiceMock.Setup(x => x.GetByIdCliente(id)).ReturnsAsync(ddd);
-            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(ddd);
-            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(ddd);
+            var commandResult = new CommandResult();
+            commandResult.Success = false;
+            commandResult.Message = string.Empty;
+            commandResult.Data = string.Empty;
+            _clienteServiceMock.Setup(x => x.GetByIdCliente(id)).ReturnsAsync(commandResult);
+            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
+            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
 
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
-
-
 
             // Act
             var result = controller.GetByIdAsync(id);
 
             // Assert
             Assert.NotNull(result);
-
-            //Assert.Equal(200, result.Status.sta.StatusCode);
+            Assert.Equal(400, ((ObjectResult)result.Result).StatusCode);
         }
 
-
-
-        ///////////////PostAsync
         [Fact]
         public void PostAsync_Post_DeveRetornarOK()
         {
             // Arrange
             var cliente = new CreateClienteCommand();
             cliente.Cpf = "30508397839";
-            var ddd = new CommandResult();
-            ddd.Success = true;
-            ddd.Message = string.Empty;
-            ddd.Data = string.Empty;
-            _clienteServiceMock.Setup(x => x.CreateCliente(cliente)).ReturnsAsync(ddd);
-            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(ddd);
-            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(ddd);
+            var commandResult = new CommandResult();
+            commandResult.Success = true;
+            commandResult.Message = string.Empty;
+            commandResult.Data = string.Empty;
+            _clienteServiceMock.Setup(x => x.CreateCliente(cliente)).ReturnsAsync(commandResult);
+            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
+            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
 
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
-
-
 
             // Act
             var result = controller.PostAsync(cliente);
 
             // Assert
             Assert.NotNull(result);
-
-            //Assert.Equal(200, result.Status.sta.StatusCode);
+            Assert.Equal(200, ((ObjectResult)result.Result).StatusCode);
         }
 
         [Fact]
@@ -174,30 +141,24 @@ namespace CRUP.API.Test
             // Arrange
             var cliente = new CreateClienteCommand();
             cliente.Cpf = "30508397839";
-            var ddd = new CommandResult();
-            ddd.Success = false;
-            ddd.Message = string.Empty;
-            ddd.Data = string.Empty;
-            _clienteServiceMock.Setup(x => x.CreateCliente(cliente)).ReturnsAsync(ddd);
-            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(ddd);
-            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(ddd);
+            var commandResult = new CommandResult();
+            commandResult.Success = false;
+            commandResult.Message = string.Empty;
+            commandResult.Data = string.Empty;
+            _clienteServiceMock.Setup(x => x.CreateCliente(cliente)).ReturnsAsync(commandResult);
+            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
+            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
 
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
-
-
 
             // Act
             var result = controller.PostAsync(cliente);
 
             // Assert
             Assert.NotNull(result);
-
-            //Assert.Equal(200, result.Status.sta.StatusCode);
+            Assert.Equal(400, ((ObjectResult)result.Result).StatusCode);
         }
 
-        /////
-        ///PutAsync
-        ///
         [Fact]
         public void PutAsync_Put_DeveRetornarOK()
         {
@@ -206,25 +167,22 @@ namespace CRUP.API.Test
 
             var cliente = new UpdateClienteCommand();
             cliente.Cpf = "30508397839";
-            var ddd = new CommandResult();
-            ddd.Success = true;
-            ddd.Message = string.Empty;
-            ddd.Data = string.Empty;
-            _clienteServiceMock.Setup(x => x.UpdateCliente(cliente)).ReturnsAsync(ddd);
-            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(ddd);
-            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(ddd);
+            var commandResult = new CommandResult();
+            commandResult.Success = true;
+            commandResult.Message = string.Empty;
+            commandResult.Data = string.Empty;
+            _clienteServiceMock.Setup(x => x.UpdateCliente(cliente)).ReturnsAsync(commandResult);
+            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
+            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
 
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
-
-
 
             // Act
             var result = controller.PutAsync(id,cliente);
 
             // Assert
             Assert.NotNull(result);
-
-            //Assert.Equal(200, result.Status.sta.StatusCode);
+            Assert.Equal(200, ((ObjectResult)result.Result).StatusCode);
         }
 
         [Fact]
@@ -235,13 +193,13 @@ namespace CRUP.API.Test
 
             var cliente = new UpdateClienteCommand();
             cliente.Cpf = "30508397839";
-            var ddd = new CommandResult();
-            ddd.Success = false;
-            ddd.Message = string.Empty;
-            ddd.Data = string.Empty;
-            _clienteServiceMock.Setup(x => x.UpdateCliente(cliente)).ReturnsAsync(ddd);
-            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(ddd);
-            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(ddd);
+            var commandResult = new CommandResult();
+            commandResult.Success = false;
+            commandResult.Message = string.Empty;
+            commandResult.Data = string.Empty;
+            _clienteServiceMock.Setup(x => x.UpdateCliente(cliente)).ReturnsAsync(commandResult);
+            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
+            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
 
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
 
@@ -252,13 +210,9 @@ namespace CRUP.API.Test
 
             // Assert
             Assert.NotNull(result);
-
-            //Assert.Equal(200, result.Status.sta.StatusCode);
+            Assert.Equal(400, ((ObjectResult)result.Result).StatusCode);
         }
 
-
-        ////DeleteAsync
-        ///
         [Fact]
         public void DeleteAsync_Delete_DeveRetornarOK()
         {
@@ -267,13 +221,13 @@ namespace CRUP.API.Test
 
             var cliente = new UpdateClienteCommand();
             cliente.Cpf = "30508397839";
-            var ddd = new CommandResult();
-            ddd.Success = true;
-            ddd.Message = string.Empty;
-            ddd.Data = string.Empty;
-            _clienteServiceMock.Setup(x => x.DeleteCliente(id)).ReturnsAsync(ddd);
-            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(ddd);
-            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(ddd);
+            var commandResult = new CommandResult();
+            commandResult.Success = true;
+            commandResult.Message = string.Empty;
+            commandResult.Data = string.Empty;
+            _clienteServiceMock.Setup(x => x.DeleteCliente(id)).ReturnsAsync(commandResult);
+            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
+            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
 
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
 
@@ -284,8 +238,7 @@ namespace CRUP.API.Test
 
             // Assert
             Assert.NotNull(result);
-
-            //Assert.Equal(200, result.Status.sta.StatusCode);
+            Assert.Equal(200, ((ObjectResult)result.Result).StatusCode);
         }
 
         [Fact]
@@ -296,13 +249,13 @@ namespace CRUP.API.Test
   
             var cliente = new UpdateClienteCommand();
             cliente.Cpf = "30508397839";
-            var ddd = new CommandResult();
-            ddd.Success = false;
-            ddd.Message = string.Empty;
-            ddd.Data = string.Empty;
-            _clienteServiceMock.Setup(x => x.DeleteCliente(id)).ReturnsAsync(ddd);
-            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(ddd);
-            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(ddd);
+            var commandResult = new CommandResult();
+            commandResult.Success = false;
+            commandResult.Message = string.Empty;
+            commandResult.Data = string.Empty;
+            _clienteServiceMock.Setup(x => x.DeleteCliente(id)).ReturnsAsync(commandResult);
+            _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
+            _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
 
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
 
@@ -313,8 +266,7 @@ namespace CRUP.API.Test
 
             // Assert
             Assert.NotNull(result);
-
-            //Assert.Equal(200, result.Status.sta.StatusCode);
+            Assert.Equal(400, ((ObjectResult)result.Result).StatusCode);
         }
     }
 }
