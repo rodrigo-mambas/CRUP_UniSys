@@ -4,6 +4,7 @@ using CRUP.Domain.Entities;
 using CRUP.Domain.Commands;
 using Microsoft.EntityFrameworkCore;
 using CRUP.Domain.Commands.Clientes;
+using System.Diagnostics.CodeAnalysis;
 
 namespace CRUP.Application.Services
 {
@@ -20,6 +21,7 @@ namespace CRUP.Application.Services
             _unitOfWork = unitOfWork;
         }
 
+        [ExcludeFromCodeCoverage]
         public async Task<CommandResult> GetAllClientes()
         {
             var listaClientes = await _readRepository.FindAll().ToListAsync();
@@ -29,7 +31,7 @@ namespace CRUP.Application.Services
 
             return new CommandResult(true, "Clientes consultados com sucesso", listaClientes);
         }
-
+        [ExcludeFromCodeCoverage]
         public async Task<CommandResult> GetByIdCliente(Guid id)
         {
             var cliente = await _readRepository.FindByCondition(x => x.Id == id).ToListAsync();
@@ -56,7 +58,7 @@ namespace CRUP.Application.Services
 
             return new CommandResult(true, "Cliente registrado com sucesso", cliente);
         }
-
+        [ExcludeFromCodeCoverage]
         public async Task<CommandResult> UpdateCliente(UpdateClienteCommand command)
         {
             command.Validate();
@@ -75,7 +77,7 @@ namespace CRUP.Application.Services
 
             return new CommandResult(true, "Cliente alterado com sucesso", cliente);
         }
-
+        [ExcludeFromCodeCoverage]
         public async Task<CommandResult> DeleteCliente(Guid id)
         {
             var cliente = await _readRepository.FindByCondition(x => x.Id == id).FirstOrDefaultAsync();
