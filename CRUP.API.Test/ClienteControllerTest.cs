@@ -21,6 +21,7 @@ namespace CRUP.API.Test
             _updateClienteHandlerMock = new Mock<IHandler<UpdateClienteCommand>>();
         }
         [Fact]
+        [Trait("Controller", "Busca Todos os Cliente Ok")]
         public void GetAllAsync_Get_DeveRetornarOK()
         {
             // Arrange
@@ -43,6 +44,7 @@ namespace CRUP.API.Test
         }
 
         [Fact]
+        [Trait("Controller", "Busca Todos os Cliente BadRequest")]
         public void GetAllAsync_Get_DeveRetornarErro()
         {
             // Arrange
@@ -66,6 +68,7 @@ namespace CRUP.API.Test
         }
 
         [Fact]
+        [Trait("Controller", "Busca por Id de Cliente Ok")]
         public void GetByIdAsync_Get_DeveRetornarOK()
         {
             // Arrange
@@ -89,6 +92,7 @@ namespace CRUP.API.Test
         }
 
         [Fact]
+        [Trait("Controller", "Busca por Id de Cliente BadRequest")]
         public void GetByIdAsync_Get_DeveRetornarErro()
         {
             // Arrange
@@ -111,12 +115,14 @@ namespace CRUP.API.Test
             Assert.Equal(400, ((ObjectResult)result.Result).StatusCode);
         }
 
-        [Fact]
-        public void PostAsync_Post_DeveRetornarOK()
+        [Theory]
+        [Trait("Controller", "Create de Cliente Ok")]
+        [InlineData("30508397839")]
+        public void PostAsync_Post_DeveRetornarOK(string cpf)
         {
             // Arrange
             var cliente = new CreateClienteCommand();
-            cliente.Cpf = "30508397839";
+            cliente.Cpf = cpf;
             var commandResult = new CommandResult();
             commandResult.Success = true;
             commandResult.Message = string.Empty;
@@ -135,12 +141,14 @@ namespace CRUP.API.Test
             Assert.Equal(200, ((ObjectResult)result.Result).StatusCode);
         }
 
-        [Fact]
-        public void PostAsync_Post_DeveRetornarErro()
+        [Theory]
+        [Trait("Controller", "Create de Cliente BadRequest")]
+        [InlineData("30508397839")]
+        public void PostAsync_Post_DeveRetornarErro(string cpf)
         {
             // Arrange
             var cliente = new CreateClienteCommand();
-            cliente.Cpf = "30508397839";
+            cliente.Cpf = cpf;
             var commandResult = new CommandResult();
             commandResult.Success = false;
             commandResult.Message = string.Empty;
@@ -159,14 +167,16 @@ namespace CRUP.API.Test
             Assert.Equal(400, ((ObjectResult)result.Result).StatusCode);
         }
 
-        [Fact]
-        public void PutAsync_Put_DeveRetornarOK()
+        [Theory]
+        [Trait("Controller","Update de Cliente Ok")]
+        [InlineData("30508397839")]
+        public void PutAsync_Put_DeveRetornarOK(string cpf)
         {
             // Arrange
             var id = new Guid();
 
             var cliente = new UpdateClienteCommand();
-            cliente.Cpf = "30508397839";
+            cliente.Cpf = cpf;
             var commandResult = new CommandResult();
             commandResult.Success = true;
             commandResult.Message = string.Empty;
@@ -185,14 +195,15 @@ namespace CRUP.API.Test
             Assert.Equal(200, ((ObjectResult)result.Result).StatusCode);
         }
 
-        [Fact]
-        public void PutAsync_Put_DeveRetornarErro()
+        [Theory]
+        [Trait("Controller", "Update de Cliente BadRequest")]
+        [InlineData("30508397839")]
+        public void PutAsync_Put_DeveRetornarErro(string cpf)
         {
             // Arrange
             var id = new Guid();
-
             var cliente = new UpdateClienteCommand();
-            cliente.Cpf = "30508397839";
+            cliente.Cpf = cpf;
             var commandResult = new CommandResult();
             commandResult.Success = false;
             commandResult.Message = string.Empty;
@@ -200,10 +211,7 @@ namespace CRUP.API.Test
             _clienteServiceMock.Setup(x => x.UpdateCliente(cliente)).ReturnsAsync(commandResult);
             _createClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<CreateClienteCommand>())).ReturnsAsync(commandResult);
             _updateClienteHandlerMock.Setup(x => x.ExecuteCommand(It.IsAny<UpdateClienteCommand>())).ReturnsAsync(commandResult);
-
             var controller = new ClienteController(_clienteServiceMock.Object, _createClienteHandlerMock.Object, _updateClienteHandlerMock.Object);
-
-
 
             // Act
             var result = controller.PutAsync(id,cliente);
@@ -213,14 +221,16 @@ namespace CRUP.API.Test
             Assert.Equal(400, ((ObjectResult)result.Result).StatusCode);
         }
 
-        [Fact]
-        public void DeleteAsync_Delete_DeveRetornarOK()
+        [Theory]
+        [Trait("Controller", "Delete de Cliente Ok")]
+        [InlineData("30508397839")]
+        public void DeleteAsync_Delete_DeveRetornarOK(string cpf)
         {
             // Arrange
             var id = new Guid();
 
             var cliente = new UpdateClienteCommand();
-            cliente.Cpf = "30508397839";
+            cliente.Cpf = cpf;
             var commandResult = new CommandResult();
             commandResult.Success = true;
             commandResult.Message = string.Empty;
@@ -241,14 +251,16 @@ namespace CRUP.API.Test
             Assert.Equal(200, ((ObjectResult)result.Result).StatusCode);
         }
 
-        [Fact]
-        public void DeleteAsync_Delete_DeveRetornarErro()
+        [Theory]
+        [Trait("Controller", "Delete de Cliente BadRequest")]
+        [InlineData("30508397839")]
+        public void DeleteAsync_Delete_DeveRetornarErro(string cpf)
         {
             // Arrange
             var id = new Guid();
   
             var cliente = new UpdateClienteCommand();
-            cliente.Cpf = "30508397839";
+            cliente.Cpf = cpf;
             var commandResult = new CommandResult();
             commandResult.Success = false;
             commandResult.Message = string.Empty;

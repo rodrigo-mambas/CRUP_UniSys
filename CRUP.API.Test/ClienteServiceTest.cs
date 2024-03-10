@@ -22,20 +22,22 @@ namespace CRUP.API.Test
             _clienteService = new ClienteService(_readRepositoryMock.Object, _writeRepositoryMock.Object, _unitOfWorkMock.Object);
         }
 
-        [Fact]
-        public async Task CreateCliente_DeveCriarCliente()
+        [Theory]
+        [Trait("Services", "Create de Cliente Ok")]
+        [InlineData("jose da silva", "30/01/2015", "12345678909", "30/01/2015","Solteiro", "123456789","Feminino","SSP")]
+        public async Task CreateCliente_DeveCriarClienteOk(string nome,string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao)
         {
             // Arrange
             var clienteCommand = new CreateClienteCommand
             {
-                Nome = "1",
-                DataDeNascimento = Convert.ToDateTime("30/01/2015"),
-                Cpf = "12345678909",
-                DataExpedicao = Convert.ToDateTime("30/01/2015"),
-                EstadoCivil = "1",
-                Rg = "1",
-                Sexo = "1",
-                OrgaoExpedicao = "1"
+                Nome = nome,
+                DataDeNascimento = Convert.ToDateTime(dataNascimento),
+                Cpf = cpf,
+                DataExpedicao = Convert.ToDateTime(dataExpedicao),
+                EstadoCivil = estadoCivil,
+                Rg = rg,
+                Sexo = sexo,
+                OrgaoExpedicao = orgaoExpedicao
             };
 
             //act
@@ -45,20 +47,25 @@ namespace CRUP.API.Test
             Assert.True(result.Success);
         }
 
-        [Fact]
-        public async Task GetAllClientes_DeveRetornarListaDeClientes1()
+        [Theory]
+        [Trait("Services", "Create de Cliente Badrequest")]
+        [InlineData("jose da silva", "30/01/2015", "123", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP","PE")]
+        [InlineData("", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP", "PE")]
+        [InlineData("jose Gomez", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "", "SSP", "PE")]
+        public async Task GetAllClientes_DeveRetornarListaDeClientes1(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao, string uf)
         {
             // Arrange
             var clienteCommand = new CreateClienteCommand
             {
-                Nome = "1",
-                DataDeNascimento = Convert.ToDateTime("30/01/2015"),
-                Cpf = "1",
-                DataExpedicao = Convert.ToDateTime("30/01/2015"),
-                EstadoCivil = "1",
-                Rg = "1",
-                Sexo = "1",
-                OrgaoExpedicao = "1"
+                Nome = nome,
+                DataDeNascimento = Convert.ToDateTime(dataNascimento),
+                Cpf = cpf,
+                DataExpedicao = Convert.ToDateTime(dataExpedicao),
+                EstadoCivil = estadoCivil,
+                Rg = rg,
+                Sexo = sexo,
+                OrgaoExpedicao = orgaoExpedicao,
+                Uf =uf
             };
 
             //act
@@ -67,14 +74,16 @@ namespace CRUP.API.Test
             //assert
             Assert.False(result.Success);
         }
-        [Fact]
-        public async Task GetAllClientes_DeveListarCliente1_OK()
+        [Theory]
+        [Trait("Services", "Create de Cliente Ok")]
+        [InlineData("jose da silva", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP","AM", "Maria da Graca", "15/01/1983", "98765432109", "30/01/2015", "Casada", "123456789", "Masculino", "SSP","RJ")]
+        public async Task GetAllClientes_DeveListarCliente1_OK(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao,string uf,
+                                                                string nome1, string dataNascimento1, string cpf1, string dataExpedicao1, string estadoCivil1, string rg1, string sexo1, string orgaoExpedicao1,string uf1)
         {
             // Arrange
             var clientes = new List<Cliente> {
-                 new Cliente( "12345678909","asdfgh1","sdddd",Convert.ToDateTime("30/01/2015"),"asd","df",Convert.ToDateTime("30/01/2015"),"wer","sdf"),
-                 new Cliente( "12345678909","asdfgh1","sdddd",Convert.ToDateTime("30/01/2015"),"asd","df",Convert.ToDateTime("30/01/2015"),"wer","sdf"),
-                 new Cliente( "12345678909","asdfgh1","sdddd",Convert.ToDateTime("30/01/2015"),"asd","df",Convert.ToDateTime("30/01/2015"),"wer","sdf"),
+                 new Cliente( cpf,nome,rg,Convert.ToDateTime(dataExpedicao),orgaoExpedicao,uf,Convert.ToDateTime(dataNascimento),sexo,estadoCivil),
+                 new Cliente( cpf1,nome1,rg1,Convert.ToDateTime(dataExpedicao1),orgaoExpedicao1,uf1,Convert.ToDateTime(dataNascimento1),sexo1,estadoCivil1),
                  }.AsQueryable();
             _readRepositoryMock.Setup(x => x.FindAll()).Returns(clientes);
 
@@ -86,6 +95,7 @@ namespace CRUP.API.Test
         }
 
         [Fact]
+        [Trait("Services", "Busca Todos os Cliente BadRequest")]
         public async Task GetAllClientes_DeveListarCliente1_Fail()
         {
             // Arrange
@@ -99,12 +109,14 @@ namespace CRUP.API.Test
             Assert.False(result.Success);
         }
 
-        [Fact]
-        public async Task GetByIdCliente_DeveListarCliente1_OK()
+        [Theory]
+        [Trait("Services", "Busca por ID o Cliente Ok")]
+        [InlineData("jose da silva", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP", "PE")]
+        public async Task GetByIdCliente_DeveListarCliente1_OK(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao, string uf)
         {
             // Arrange
             var id = new Guid();
-            var clientes = new List<Cliente> {new Cliente( "12345678909","asdfgh1","sdddd",Convert.ToDateTime("30/01/2015"),"asd","df",Convert.ToDateTime("30/01/2015"),"wer","sdf")}.AsQueryable();
+            var clientes = new List<Cliente> {new Cliente(cpf, nome, rg, Convert.ToDateTime(dataExpedicao), orgaoExpedicao, uf, Convert.ToDateTime(dataNascimento), sexo, estadoCivil) }.AsQueryable();
             _readRepositoryMock.Setup(x => x.FindByCondition(x => x.Id == id)).Returns(clientes);
 
             //act
@@ -115,6 +127,7 @@ namespace CRUP.API.Test
         }
 
         [Fact]
+        [Trait("Services", "Busca por ID o Cliente BadRequest")]
         public async Task GetByIdCliente_DeveListarCliente1_Fail()
         {
             // Arrange
@@ -129,13 +142,15 @@ namespace CRUP.API.Test
             Assert.False(result.Success);
         }
 
-        [Fact]
-        public async Task DeleteCliente_DeveDeletarCliente1_Erro()
+        [Theory]
+        [Trait("Services", "Delete Cliente por Id BadRequest")]
+        [InlineData("jose da silva", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP", "PE")]
+        public async Task DeleteCliente_DeveDeletarCliente1_Erro(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao, string uf)
         {
             // Arrange
             var id = new Guid();
             var clientes = new List<Cliente>().AsQueryable();
-            var cliente = new Cliente( "12345678909","asdfgh1","sdddd",Convert.ToDateTime("30/01/2015"),"asd","df",Convert.ToDateTime("30/01/2015"),"wer","sdf");
+            var cliente = new Cliente(cpf, nome, rg, Convert.ToDateTime(dataExpedicao), orgaoExpedicao, uf, Convert.ToDateTime(dataNascimento), sexo, estadoCivil);
             _readRepositoryMock.Setup(x => x.FindByCondition(x => x.Id == cliente.Id)).Returns(clientes);
             _writeRepositoryMock.Setup(x => x.Delete(cliente));
 
@@ -145,13 +160,16 @@ namespace CRUP.API.Test
             //assert
             Assert.False(result.Success);
         }
-        [Fact]
-        public async Task DeleteCliente_DeveDeletarCliente1_Ok()
+
+        [Theory]
+        [Trait("Services", "Delete Cliente por Id Ok")]
+        [InlineData("jose da silva", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP", "PE")]
+        public async Task DeleteCliente_DeveDeletarCliente1_Ok(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao, string uf)
         {
             // Arrange
             var id = new Guid();
-            var clientes = new List<Cliente> {new Cliente( "12345678909","asdfgh1","sdddd",Convert.ToDateTime("30/01/2015"),"asd","df",Convert.ToDateTime("30/01/2015"),"wer","sdf"),}.AsQueryable();
-            var cliente =new Cliente("12345678909", "asdfgh1", "sdddd", Convert.ToDateTime("30/01/2015"), "asd", "df", Convert.ToDateTime("30/01/2015"), "wer", "sdf");
+            var clientes = new List<Cliente> {new Cliente(cpf, nome, rg, Convert.ToDateTime(dataExpedicao), orgaoExpedicao, uf, Convert.ToDateTime(dataNascimento), sexo, estadoCivil),}.AsQueryable();
+            var cliente =new Cliente(cpf, nome, rg, Convert.ToDateTime(dataExpedicao), orgaoExpedicao, uf, Convert.ToDateTime(dataNascimento), sexo, estadoCivil);
             _readRepositoryMock.Setup(x => x.FindByCondition(x => x.Id == id)).Returns(clientes);
             _writeRepositoryMock.Setup(x => x.Delete(cliente));
 
@@ -162,27 +180,31 @@ namespace CRUP.API.Test
             Assert.True(result.Success);
         }
 
-        [Fact]
-        public async Task UpdateCliente_DeveUpdateCliente1_Ok()
+        [Theory]
+        [Trait("Services", "Update Cliente por Id Ok")]
+        [InlineData("jose da silva", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP", "PE", "20682e30-60ed-4f9d-a086-3e483de3325d")]
+        public async Task UpdateCliente_DeveUpdateCliente1_Ok(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao, string uf,string idEntrada)
         {
             // Arrange
             var id = new Guid();
-            id = System.Guid.Parse("20682e30-60ed-4f9d-a086-3e483de3325d");
+            id = System.Guid.Parse(idEntrada);
             var clientes = new List<Cliente> {
-                 new Cliente( "12345678909","asdfgh1","sdddd",Convert.ToDateTime("30/01/2015"),"asd","df",Convert.ToDateTime("30/01/2015"),"wer","sdf"),
+                 new Cliente( cpf, nome, rg, Convert.ToDateTime(dataExpedicao), orgaoExpedicao, uf, Convert.ToDateTime(dataNascimento), sexo, estadoCivil),
                  }.AsQueryable();
-            var updateCommand = new UpdateClienteCommand();
-            updateCommand.Nome = "1";
-            updateCommand.DataDeNascimento = Convert.ToDateTime("30/01/2015");
-            updateCommand.Cpf = "12345678909";
-            updateCommand.IdClienteExistente = id;
-            updateCommand.EstadoCivil = "aa";
-            updateCommand.DataExpedicao = Convert.ToDateTime("30/01/2015");
-            updateCommand.OrgaoExpedicao = "asdf";
-            updateCommand.Uf = "as";
-            updateCommand.Rg = "12";
-            updateCommand.Sexo = "dfg";
-            var cliente = new Cliente("12345678909", "asdfgh1", "sdddd", Convert.ToDateTime("30/01/2015"), "asd", "df", Convert.ToDateTime("30/01/2015"), "wer", "sdf");
+            var updateCommand = new UpdateClienteCommand
+            {
+                Nome = nome,
+                DataDeNascimento = Convert.ToDateTime(dataNascimento),
+                Cpf = cpf,
+                IdClienteExistente = id,
+                EstadoCivil = estadoCivil,
+                DataExpedicao = Convert.ToDateTime(dataExpedicao),
+                OrgaoExpedicao = orgaoExpedicao,
+                Uf = uf,
+                Rg = rg,
+                Sexo = sexo
+            };
+            var cliente = new Cliente(cpf, nome, rg, Convert.ToDateTime(dataExpedicao), orgaoExpedicao, uf, Convert.ToDateTime(dataNascimento), sexo, estadoCivil);
 
             _readRepositoryMock.Setup(x => x.FindByCondition(x => x.Id == updateCommand.IdClienteExistente)).Returns(clientes);
 
@@ -195,25 +217,29 @@ namespace CRUP.API.Test
             Assert.True(result.Success);
         }
 
-        [Fact]
-        public async Task UpdateCliente_DeveUpdateCliente1_Erro()
+        [Theory]
+        [Trait("Services", "Update Cliente por Id Ok")]
+        [InlineData("jose da silva", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP", "PE", "20682e30-60ed-4f9d-a086-3e483de3325d")]
+        public async Task UpdateCliente_DeveUpdateCliente1_Erro(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao, string uf, string idEntrada)
         {
             // Arrange
             var id = new Guid();
-            id = System.Guid.Parse("20682e30-60ed-4f9d-a086-3e483de3325d");
+            id = System.Guid.Parse(idEntrada);
             var clientes = new List<Cliente>().AsQueryable();
-            var updateCommand = new UpdateClienteCommand();
-            updateCommand.Nome = "1";
-            updateCommand.DataDeNascimento = Convert.ToDateTime("30/01/2015");
-            updateCommand.Cpf = "12345678909";
-            updateCommand.IdClienteExistente = id;
-            updateCommand.EstadoCivil = "aa";
-            updateCommand.DataExpedicao = Convert.ToDateTime("30/01/2015");
-            updateCommand.OrgaoExpedicao = "asdf";
-            updateCommand.Uf = "as";
-            updateCommand.Rg = "12";
-            updateCommand.Sexo = "dfg";
-            var cliente = new Cliente("12345678909", "asdfgh1", "sdddd", Convert.ToDateTime("30/01/2015"), "asd", "df", Convert.ToDateTime("30/01/2015"), "wer", "sdf");
+            var updateCommand = new UpdateClienteCommand
+            {
+                Nome = nome,
+                DataDeNascimento = Convert.ToDateTime(dataNascimento),
+                Cpf = cpf,
+                IdClienteExistente = id,
+                EstadoCivil = estadoCivil,
+                DataExpedicao = Convert.ToDateTime(dataExpedicao),
+                OrgaoExpedicao = orgaoExpedicao,
+                Uf = uf,
+                Rg = rg,
+                Sexo = sexo
+            };
+            var cliente = new Cliente(cpf, nome, rg, Convert.ToDateTime(dataExpedicao), orgaoExpedicao, uf, Convert.ToDateTime(dataNascimento), sexo, estadoCivil);
 
             _readRepositoryMock.Setup(x => x.FindByCondition(x => x.Id == updateCommand.IdClienteExistente)).Returns(clientes);
 
@@ -226,29 +252,30 @@ namespace CRUP.API.Test
             Assert.False(result.Success);
         }
 
-        [Fact]
-        public async Task UpdateCliente_DeveUpdateCliente1_Fail()
+        [Theory]
+        [Trait("Services", "Update Cliente por Id Ok")]
+        [InlineData("jose da silva", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP", "PE", "20682e30-60ed-4f9d-a086-3e483de3325d")]
+
+        public async Task UpdateCliente_DeveUpdateCliente1_Fail(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao, string uf, string idEntrada)
         {
             // Arrange
             var id = new Guid();
-            //id = System.Guid.Parse("20682e30-60ed-4f9d-a086-3e483de3325d");
+            //id = System.Guid.Parse(idEntrada);
             var clientes = new List<Cliente>().AsQueryable();
             var updateCommand = new UpdateClienteCommand
             {
-                Nome = "1",
-                DataDeNascimento = Convert.ToDateTime("30/01/2015"),
-                Cpf = "1",
+                Nome = nome,
+                DataDeNascimento = Convert.ToDateTime(dataNascimento),
+                Cpf = cpf,
                 IdClienteExistente = id,
-                EstadoCivil = "aa",
-                DataExpedicao = Convert.ToDateTime("30/01/2015"),
-                OrgaoExpedicao = "asdf",
-                Uf = "as",
-                Rg = "12",
-                Sexo = "dfg"
+                EstadoCivil = estadoCivil,
+                DataExpedicao = Convert.ToDateTime(dataExpedicao),
+                OrgaoExpedicao = orgaoExpedicao,
+                Uf = uf,
+                Rg = rg,
+                Sexo = sexo
             };
-            var cliente = new Cliente("12345678909", "asdfgh1", "sdddd", Convert.ToDateTime("30/01/2015"), "asd", "df", Convert.ToDateTime("30/01/2015"), "wer", "sdf");
-
-            //var clientesQueryable = clientes.AsQueryable();
+            var cliente = new Cliente(cpf, nome, rg, Convert.ToDateTime(dataExpedicao), orgaoExpedicao, uf, Convert.ToDateTime(dataNascimento), sexo, estadoCivil);
             _readRepositoryMock.Setup(x => x.FindByCondition(x => x.Id == updateCommand.IdClienteExistente)).Returns(clientes);
             _writeRepositoryMock.Setup(x => x.Update(cliente));
 

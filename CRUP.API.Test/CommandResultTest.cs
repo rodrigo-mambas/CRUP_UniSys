@@ -8,6 +8,7 @@ namespace CRUP.API.Test
     public class CommandResultTests
     {
         [Fact]
+        [Trait("CommandResult", "Com Sucesso e mensagem")]
         public void Deve_InicializarCommandResult_ComSucessoEMensagem()
         {
             // Arrange
@@ -24,6 +25,7 @@ namespace CRUP.API.Test
         }
 
         [Fact]
+        [Trait("CommandResult", "Com Sucesso, mensagem e dados")]
         public void Deve_InicializarCommandResult_ComSucessoMensagemEDados()
         {
             // Arrange
@@ -39,7 +41,5 @@ namespace CRUP.API.Test
             Assert.Equal(message, commandResult.Message);
             Assert.Equal(data, commandResult.Data);
         }
-
-        // Adicione mais métodos de teste conforme necessário para outras verificações
     }
 }

@@ -12,23 +12,25 @@ namespace CRUP.API.Test
 {
     public class CreateClienteHandlerTest
     {
-        [Fact]
-        public async Task ExecuteCommand_DeveChamarMetodoCreateClienteDoClienteService()
+        [Theory]
+        [Trait("Services", "Create de Cliente Ok")]
+        [InlineData("jose da silva", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP","SP")]
+        public async Task ExecuteCommand_DeveChamarMetodoCreateClienteDoClienteService(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao, string uf)
         {
             // Arrange
             var mockClienteService = new Mock<IClienteService>();
             var handler = new CreateClienteHandler(mockClienteService.Object);
             var command = new CreateClienteCommand
             {
-                Cpf = "12345678900",
-                Nome = "Fulano",
-                Rg = "1234567",
-                DataExpedicao = DateTime.Parse("30/01/2015"),
-                OrgaoExpedicao = "SSP",
-                Uf = "SP",
-                DataDeNascimento = DateTime.Parse("30/01/2015"),
-                Sexo = "M",
-                EstadoCivil = "Solteiro(a)"
+                Cpf = cpf,
+                Nome = nome,
+                Rg = rg,
+                DataExpedicao = DateTime.Parse(dataExpedicao),
+                OrgaoExpedicao = orgaoExpedicao,
+                Uf = uf,
+                DataDeNascimento = DateTime.Parse(dataNascimento),
+                Sexo = sexo,
+                EstadoCivil = estadoCivil
             };
 
             // Act
