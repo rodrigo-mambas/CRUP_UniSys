@@ -20,3 +20,13 @@ Critérios de avaliação:
 
 ## Demonstração 
 ![image](https://github.com/rodrigo-mambas/CRUP_UniSys/assets/57135792/0c64892d-5140-4c4b-9c94-4bf04034c4a5)
+
+
+## Para Execução
+1 - ter o docker desktop instalado.
+    - Acessar o site https://www.docker.com/products/docker-desktop/ e baixar a versão para o seu sistema operacional.
+2 - executar o comando abaixo pelo PowerShel
+    - docker run -p 5432:5432 -e POSTGRES_PASSWORD=1234 -d postgres
+3 - no VisualStudio no PackageManagerConsole executar o comando abaixo apontando para o projeto "CRUP.Infra", pois ja deixei a migration no projeto.
+    - Update-Database
+4 - executar o projeto "CRUP.API".
