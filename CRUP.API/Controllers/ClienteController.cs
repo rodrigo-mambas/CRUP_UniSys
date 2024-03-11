@@ -2,6 +2,7 @@
 using CRUP.Domain.Commands;
 using CRUP.Domain.Commands.Clientes;
 using CRUP.Shared.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CRUP.API.Controllers
@@ -34,6 +35,7 @@ namespace CRUP.API.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize]
         [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetByIdAsync(Guid id)
         {
@@ -46,6 +48,7 @@ namespace CRUP.API.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ProducesResponseType(typeof(CommandResult), StatusCodes.Status201Created)]
         public async Task<IActionResult> PostAsync(CreateClienteCommand command)
         {
@@ -58,6 +61,7 @@ namespace CRUP.API.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(CommandResult), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> PutAsync(Guid id, UpdateClienteCommand command)
@@ -72,6 +76,7 @@ namespace CRUP.API.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         [ProducesResponseType(typeof(CommandResult), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(CommandResult), StatusCodes.Status204NoContent)]
         public async Task<IActionResult> DeleteAsync(Guid id)

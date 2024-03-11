@@ -30,3 +30,5 @@ Critérios de avaliação:
 3. no VisualStudio no PackageManagerConsole executar o comando abaixo apontando para o projeto "CRUP.Infra", pois ja deixei a migration no projeto.
     - Update-Database
 4. executar o projeto "CRUP.API".
+
+OBS: Com Token implementado.

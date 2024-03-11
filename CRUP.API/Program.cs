@@ -10,6 +10,9 @@ using CRUP.Domain.Commands.Clientes;
 using CRUP.Application.Services;
 using System.Diagnostics.CodeAnalysis;
 using CRUP.API.Configuration;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -29,7 +32,10 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
-app.UseCors();
+app.UseCors("EnableCORS");
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
@@ -47,6 +53,25 @@ void ConfigureServices(WebApplicationBuilder builder)
         //options.UseSqlServer(connectionString, x => x.MigrationsAssembly("CRUP.Infra"));
         options.UseNpgsql(connectionString, x => x.MigrationsAssembly("CRUP.Infra"));
     });
+
+    builder.Services.AddAuthentication(opt =>
+    {
+        opt.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        opt.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+    };
+});
 
     // Add services to the container.
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
