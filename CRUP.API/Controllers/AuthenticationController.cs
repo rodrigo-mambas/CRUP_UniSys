@@ -1,6 +1,7 @@
 ﻿using CRUP.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using System.Diagnostics.CodeAnalysis;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -12,12 +13,15 @@ namespace CRUP.API.Controllers
 
     public class AuthenticationController : ControllerBase
     {
+        
         private IConfiguration _config;
+        [ExcludeFromCodeCoverage]
         public AuthenticationController(IConfiguration Configuration)
         {
             _config = Configuration;
         }
 
+        [ExcludeFromCodeCoverage]
         [HttpPost, Route("login")]
         public IActionResult Login([FromBody] LoginViewModel user)
         {

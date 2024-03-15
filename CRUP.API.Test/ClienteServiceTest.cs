@@ -181,6 +181,44 @@ namespace CRUP.API.Test
         }
 
         [Theory]
+        [Trait("Services", "Update Cliente por Id Erro")]
+        [InlineData("jose da silva", "30/01/2015", "1234", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP", "PE", "20682e30-60ed-4f9d-a086-3e483de3325d")]
+        public async Task UpdateCliente_DeveUpdateCliente1_ErroValidacao(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao, string uf, string idEntrada)
+        {
+            // Arrange
+            var id = new Guid();
+            id = System.Guid.Parse(idEntrada);
+            var clientes = new List<Cliente> {
+                 new Cliente( cpf, nome, rg, Convert.ToDateTime(dataExpedicao), orgaoExpedicao, uf, Convert.ToDateTime(dataNascimento), sexo, estadoCivil),
+                 }.AsQueryable();
+            var updateCommand = new UpdateClienteCommand
+            {
+                Nome = nome,
+                DataDeNascimento = Convert.ToDateTime(dataNascimento),
+                Cpf = cpf,
+                IdClienteExistente = id,
+                EstadoCivil = estadoCivil,
+                DataExpedicao = Convert.ToDateTime(dataExpedicao),
+                OrgaoExpedicao = orgaoExpedicao,
+                Uf = uf,
+                Rg = rg,
+                Sexo = sexo
+            };
+            var cliente = new Cliente(cpf, nome, rg, Convert.ToDateTime(dataExpedicao), orgaoExpedicao, uf, Convert.ToDateTime(dataNascimento), sexo, estadoCivil);
+
+            _readRepositoryMock.Setup(x => x.FindByCondition(x => x.Id == updateCommand.IdClienteExistente)).Returns(clientes);
+
+            _writeRepositoryMock.Setup(x => x.Update(cliente));
+
+            //act
+            var result = await _clienteService.UpdateCliente(updateCommand);
+
+            //assert
+            Assert.False(result.Success);
+        }
+
+
+        [Theory]
         [Trait("Services", "Update Cliente por Id Ok")]
         [InlineData("jose da silva", "30/01/2015", "12345678909", "30/01/2015", "Solteiro", "123456789", "Feminino", "SSP", "PE", "20682e30-60ed-4f9d-a086-3e483de3325d")]
         public async Task UpdateCliente_DeveUpdateCliente1_Ok(string nome, string dataNascimento, string cpf, string dataExpedicao, string estadoCivil, string rg, string sexo, string orgaoExpedicao, string uf,string idEntrada)
